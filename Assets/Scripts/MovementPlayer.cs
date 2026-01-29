@@ -25,9 +25,10 @@ public class MovementPlayer : NetworkBehaviour
             );
             /* Dado que transform object tiene activado transform sync, la nueva posición se replicará automáticamente a los clientes */
             transform.position = randomPos;
-            
+            Color c = new Color(Random.value, Random.value, Random.value);
+            UpdateColorClientRpc(c);
         }
-        ChangeColorRandom();
+  
     }
 
     /*IEnumerator Start()
@@ -79,7 +80,6 @@ public class MovementPlayer : NetworkBehaviour
             UpdatePositionClientRpc(transform.position);
 
     }
-
     [Rpc(SendTo.ClientsAndHost)]
     private void UpdatePositionClientRpc(Vector3 pos)
     {
@@ -88,9 +88,23 @@ public class MovementPlayer : NetworkBehaviour
         // Actualizar posición en clientes
         transform.position = pos;
     }
-    private void ChangeColorRandom()
+
+        //Solución Tarea UT2
+    [Rpc(SendTo.Server)]
+    public void ChangeColorRandomRpc()
+    { 
+        Color c = new Color(Random.value, Random.value, Random.value);
+        UpdateColorClientRpc(c);
+        
+        
+    }
+    [Rpc(SendTo.ClientsAndHost)]
+    private void UpdateColorClientRpc(Color c)
     {
         if (render != null)
-            render.material.color = new Color(Random.value, Random.value, Random.value);
+            render.material.color=c;
     }
+
+    
+    
 }
